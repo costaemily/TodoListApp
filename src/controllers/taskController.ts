@@ -29,6 +29,6 @@ export async function deleteTask(id: string) {
   await tasksCollection.doc(id).delete();
 }
 
-export async function listTasksOrderbyDateIn() {
+export async function listTasks() {
   return await tasksCollection.get();
 }
