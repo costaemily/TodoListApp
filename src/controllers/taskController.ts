@@ -16,8 +16,8 @@ export async function consultTask(id: string) {
   return await tasksCollection.doc(id).get();
 }
 
-export async function updateTask(id: string, taskInfo: Task) {
-  await tasksCollection.doc(id).update({
+export async function updateTask(taskInfo: Task) {
+  await tasksCollection.doc(taskInfo.id).update({
     description: taskInfo.description,
     dateIn: taskInfo.dateIn,
     dateModification: taskInfo.dateModification,
@@ -30,5 +30,17 @@ export async function deleteTask(id: string) {
 }
 
 export async function listTasks() {
-  return await tasksCollection.get();
+  const taskList: Array<Task> = [];
+  const querySnapshot = await tasksCollection.get();
+  querySnapshot.forEach(doc => {
+    let task = new Task(
+      doc.id,
+      doc.data().description,
+      doc.data().dateIn,
+      doc.data().dateModification,
+      doc.data().isDone,
+    );
+    taskList.push(task);
+  });
+  return taskList;
 }
